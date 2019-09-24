@@ -11,4 +11,20 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="DatingApp-SPA\node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="DatingApp-SPA\node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="DatingApp-SPA\node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="DatingApp-SPA\node_modules\**" />
+  </ItemGroup>
+
 </Project>
