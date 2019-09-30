@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using DatingApp2.API.Data;
+using DatingApp2.API.Dtos;
 using DatingApp2.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DatingApp2.API.Controllers
 {
-    [Route("ap/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -17,19 +18,20 @@ namespace DatingApp2.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(string username, string password)
+        public async Task<IActionResult> Register(UserForRegisterDto user)
         {
-            username = username.ToLower();
+            user.UserName = user.UserName.ToLower();
 
-            if (await _repo.UserExists(username))
+            if (await _repo.UserExists(user.UserName))
                 return BadRequest("Username already exists");
-
+            // The reason this is var and not User is, it's more obvious here.
             var userToCreate = new User
             {
-                UserName = username
+                UserName = user.UserName
             };
-
-            User createdUser = await _repo.Register(userToCreate, password);
+            
+            // It's not as obvious that this is a User.
+            User createdUser = await _repo.Register(userToCreate, user.Password);
 
             return StatusCode(201);
         }
