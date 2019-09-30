@@ -21,11 +21,11 @@ namespace DatingApp2.API.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
-
                     b.Property<byte[]>("PasswordHash");
 
                     b.Property<byte[]>("PasswordSalt");
+
+                    b.Property<string>("UserName");
 
                     b.HasKey("Id");
 
