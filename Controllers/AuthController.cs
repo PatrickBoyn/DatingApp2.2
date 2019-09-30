@@ -23,7 +23,7 @@ namespace DatingApp2.API.Controllers
             user.UserName = user.UserName.ToLower();
 
             if (await _repo.UserExists(user.UserName))
-                return BadRequest("Username already exists");
+                return BadRequest($"The name {user.UserName} already exists.");
             // The reason this is var and not User is, it's more obvious here.
             var userToCreate = new User
             {
