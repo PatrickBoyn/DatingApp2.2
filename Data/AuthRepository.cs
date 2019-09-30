@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
 using DatingApp2.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DatingApp2.API.Data
 {
@@ -38,7 +40,26 @@ namespace DatingApp2.API.Data
 
         public async Task<User> Login(string username, string password)
         {
-            throw new System.NotImplementedException();
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+
+            if (user == null)
+                return null;
+
+            return !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt) ? null : user;
+        }
+
+        private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                byte[] computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+                if (computeHash.Where((t, i) => t != passwordHash[i]).Any())
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public async Task<bool> UserExists(string username)
